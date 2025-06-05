@@ -1,8 +1,21 @@
-# React + Vite
+[contributing guidelines]: ../CONTRIBUTING.md
+[Dev setup & Requirements]: docs/dev-setup.md
+[Model Registry UI documentation]: docs/README.md
+[issue]: https://github.com/kubeflow/model-registry/issues/new/choose
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Kubeflow Model Registry UI
 
-Currently, two official plugins are available:
+The Kubeflow Model Registry UI is a standalone web app for Kubeflow Model Registry.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Contributing
+
+Individual bug fixes are welcome, it is recommended that you create a bug [issue] at the same time to describe the fix you're applying. If you are unsure how best to solve it, start with the issue and note your desire to contribute.
+
+We do have some [contributing guidelines] you can follow.
+
+## Documentation
+
+Read more about the Model Registry UI in one of our documentation links.
+
+* [Dev setup & Requirements]
+* [Model Registry UI documentation]
