@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/ederign/inference-llm-playground/internal/models"
+	"github.com/alexcreasy/modarch-quickstart/internal/models"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
 )

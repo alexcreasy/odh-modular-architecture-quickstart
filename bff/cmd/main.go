@@ -11,8 +11,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/ederign/inference-llm-playground/internal/api"
-	"github.com/ederign/inference-llm-playground/internal/config"
+	"github.com/alexcreasy/modarch-quickstart/internal/api"
+	"github.com/alexcreasy/modarch-quickstart/internal/config"
 )
 
 func main() {

@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/ederign/inference-llm-playground/internal/constants"
+	"github.com/alexcreasy/modarch-quickstart/internal/constants"
 	"io"
 	"log/slog"
 	"net/http"

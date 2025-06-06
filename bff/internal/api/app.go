@@ -1,24 +1,19 @@
 package api
 
 import (
+	"github.com/alexcreasy/modarch-quickstart/internal/config"
+	helper "github.com/alexcreasy/modarch-quickstart/internal/helpers"
+	"github.com/julienschmidt/httprouter"
 	"log/slog"
 	"net/http"
 	"path"
-	"strings"
-
-	"github.com/ederign/inference-llm-playground/internal/config"
-	helper "github.com/ederign/inference-llm-playground/internal/helpers"
-	"github.com/julienschmidt/httprouter"
 )
 
 const (
 	Version = "1.0.0"
 
-	PathPrefix      = "/v1"
-	HealthCheckPath = PathPrefix + "/healthcheck"
-
-	//v1/models/sklearn-iris:explain
-	ExplainPath = PathPrefix + "/models/:model_explain"
+	ApiPathPrefix   = "/api/v1"
+	HealthCheckPath = "/healthcheck"
 )
 
 type App struct {
@@ -44,22 +39,19 @@ func (app *App) Routes() http.Handler {
 	apiRouter.MethodNotAllowed = http.HandlerFunc(app.methodNotAllowedResponse)
 
 	// HTTP client routes
-	apiRouter.GET(HealthCheckPath, app.HealthcheckHandler)
-	apiRouter.POST(ExplainPath, app.ExplainPostHandler)
-	apiRouter.GET(ExplainPath, app.ExplainGetHandler)
 
 	// App Router
 	appMux := http.NewServeMux()
 
 	// handler for api calls
-	appMux.Handle("/v1/", apiRouter)
+	appMux.Handle(ApiPathPrefix+"/", apiRouter)
 
 	//file server for the frontend file and SPA routes
 	staticDir := http.Dir(app.config.StaticAssetsDir)
 	fileServer := http.FileServer(staticDir)
 
 	// Handle assets directory explicitly
-	appMux.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir(path.Join(app.config.StaticAssetsDir, "assets")))))
+	//appMux.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir(path.Join(app.config.StaticAssetsDir, "assets")))))
 
 	// Handle root and other paths
 	appMux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -83,23 +75,15 @@ func (app *App) Routes() http.Handler {
 		http.ServeFile(w, r, path.Join(app.config.StaticAssetsDir, "index.html"))
 	})
 
-	// Add this handler to catch assets requested from any path
-	appMux.HandleFunc("/v1/models/assets/", func(w http.ResponseWriter, r *http.Request) {
-		// Redirect or rewrite the request to the correct assets path
-		newPath := strings.Replace(r.URL.Path, "/v1/models/assets/", "/assets/", 1)
-		ctxLogger := helper.GetContextLoggerFromReq(r)
-		ctxLogger.Debug("Redirecting asset request",
-			slog.String("from", r.URL.Path),
-			slog.String("to", newPath))
+	healthcheckMux := http.NewServeMux()
+	healthcheckRouter := httprouter.New()
+	healthcheckRouter.GET(HealthCheckPath, app.HealthcheckHandler)
+	healthcheckMux.Handle(HealthCheckPath, app.RecoverPanic(app.EnableTelemetry(healthcheckRouter)))
 
-		// Option 1: Redirect (client-side)
-		http.Redirect(w, r, newPath, http.StatusMovedPermanently)
+	// Combines the healthcheck endpoint with the rest of the routes
+	combinedMux := http.NewServeMux()
+	combinedMux.Handle(HealthCheckPath, healthcheckMux)
+	combinedMux.Handle("/", app.RecoverPanic(app.EnableTelemetry(app.EnableCORS(appMux))))
 
-		// Option 2: Rewrite and serve (server-side)
-		// newReq := r.Clone(r.Context())
-		// newReq.URL.Path = newPath
-		// http.StripPrefix("/assets/", http.FileServer(http.Dir(path.Join(app.config.StaticAssetsDir, "assets")))).ServeHTTP(w, newReq)
-	})
-
-	return app.RecoverPanic(app.EnableCORS(appMux))
+	return combinedMux
 }

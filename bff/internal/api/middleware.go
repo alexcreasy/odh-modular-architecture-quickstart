@@ -3,8 +3,8 @@ package api
 import (
 	"context"
 	"fmt"
-	"github.com/ederign/inference-llm-playground/internal/constants"
-	helper "github.com/ederign/inference-llm-playground/internal/helpers"
+	"github.com/alexcreasy/modarch-quickstart/internal/constants"
+	helper "github.com/alexcreasy/modarch-quickstart/internal/helpers"
 	"github.com/google/uuid"
 	"github.com/rs/cors"
 	"log/slog"

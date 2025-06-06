@@ -3,7 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/ederign/inference-llm-playground/internal/integrations"
+	"github.com/alexcreasy/modarch-quickstart/internal/integrations"
 	"net/http"
 	"strconv"
 )

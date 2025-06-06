@@ -4,7 +4,7 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	helper "github.com/ederign/inference-llm-playground/internal/helpers"
+	helper "github.com/alexcreasy/modarch-quickstart/internal/helpers"
 	"github.com/google/uuid"
 	"io"
 	"log/slog"
