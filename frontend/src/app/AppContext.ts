@@ -1,10 +1,6 @@
 import * as React from 'react';
-import { UserSettings, ConfigSettings } from '~/shared/types';
 
-type AppContextProps = {
-  config: ConfigSettings;
-  user: UserSettings;
-};
+type AppContextProps = object;
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 export const AppContext = React.createContext({} as AppContextProps);
