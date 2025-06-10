@@ -19,11 +19,9 @@ import {
   NavBar,
   useModularArchContext,
   DeploymentMode,
-  useNamespaceSelector,
 } from 'mod-arch-shared';
 import AppRoutes from './AppRoutes';
 import { AppContext } from './AppContext';
-import { ModelRegistrySelectorContextProvider } from './context/ModelRegistrySelectorContext';
 import 'mod-arch-shared/style/MUI-theme.scss';
 import AppNavSidebar from './AppNavSidebar';
 
@@ -34,8 +32,6 @@ const App: React.FC = () => {
     loaded: configLoaded,
     loadError: configError,
   } = useSettings();
-
-  const { namespacesLoaded, namespacesLoadError, initializationError } = useNamespaceSelector();
 
   const username = userSettings?.userId;
   const { deploymentMode } = useModularArchContext();
@@ -52,7 +48,7 @@ const App: React.FC = () => {
     [configSettings, userSettings],
   );
 
-  const error = configError || namespacesLoadError || initializationError;
+  const error = configError;
 
   const sidebar = <PageSidebar isSidebarOpen={false} />;
 
@@ -65,12 +61,7 @@ const App: React.FC = () => {
           <Stack hasGutter>
             <StackItem>
               <Alert variant="danger" isInline title="General loading error">
-                <p>
-                  {configError?.message ||
-                    namespacesLoadError?.message ||
-                    initializationError?.message ||
-                    'Unknown error occurred during startup'}
-                </p>
+                <p>{configError?.message || 'Unknown error occurred during startup'}</p>
                 <p>Logging out and logging back in may solve the issue</p>
               </Alert>
             </StackItem>
@@ -90,7 +81,7 @@ const App: React.FC = () => {
 
   // Waiting on the API to finish
   const loading =
-    !configLoaded || !userSettings || !configSettings || !contextValue || !namespacesLoaded;
+    !configLoaded || !userSettings || !configSettings || !contextValue;
 
   return loading ? (
     <Bullseye>
@@ -115,9 +106,7 @@ const App: React.FC = () => {
         isManagedSidebar={!isIntegrated}
         sidebar={!isIntegrated ? <AppNavSidebar /> : sidebar}
       >
-        <ModelRegistrySelectorContextProvider>
-          <AppRoutes />
-        </ModelRegistrySelectorContextProvider>
+        <AppRoutes />
         <ToastNotifications />
       </Page>
     </AppContext.Provider>
