@@ -1,35 +1,28 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "rootDir": ".",
     "outDir": "dist",
     "module": "esnext",
     "target": "es5",
-    "lib": [
-      "es6",
-      "dom",
-      "ES2023.Array"
-    ],
+    "lib": ["es6", "dom"],
     "sourceMap": true,
     "jsx": "react",
     "moduleResolution": "node",
-    "downlevelIteration": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "allowJs": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
-    "baseUrl": "./src",
     "paths": {
-      "~/*": [
-        "./*"
-      ]
+      "@app/*": ["src/app/*"],
+      "@assets/*": ["node_modules/@patternfly/react-core/dist/styles/assets/*"]
     },
     "importHelpers": true,
-    "skipLibCheck": true,
-    "noErrorTruncation": true
+    "skipLibCheck": true
   },
   "include": [
     "**/*.ts",
@@ -37,10 +30,5 @@
     "**/*.jsx",
     "**/*.js"
   ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "public-cypress",
-    "src/__tests__/cypress"
-  ]
+  "exclude": ["node_modules"]
 }
